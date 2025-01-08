@@ -1,61 +1,78 @@
 "use client";
 
-import { createUser } from "@/server/actions";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { useTransition } from "react";
+import { createUser } from "@/server/actions";
+import { userSchema, type UserFormData } from "@/lib/schemas";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
 
 export const UserForm = () => {
     const [isPending, startTransition] = useTransition();
 
-    const handleSubmit = async (formData: FormData) => {
+    const form = useForm<UserFormData>({
+        resolver: zodResolver(userSchema),
+        defaultValues: {
+            fullName: "",
+            phone: "",
+        },
+    });
+
+    const onSubmit = (values: UserFormData) => {
         startTransition(async () => {
-            const result = await createUser(formData);
+            const result = await createUser(values);
             if (result.success) {
-                (
-                    document.getElementById("userForm") as HTMLFormElement
-                ).reset();
+                form.reset();
             }
         });
     };
 
     return (
-        <form
-            id="userForm"
-            action={handleSubmit}
-            className="w-full max-w-md space-y-4">
-            <div>
-                <label
-                    htmlFor="fullName"
-                    className="block text-sm font-medium mb-1">
-                    Full Name
-                </label>
-                <input
-                    type="text"
-                    id="fullName"
+        <Form {...form}>
+            <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="w-full max-w-md space-y-4">
+                <FormField
+                    control={form.control}
                     name="fullName"
-                    required
-                    className="w-full px-3 py-2 border rounded-md"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Full Name</FormLabel>
+                            <FormControl>
+                                <Input placeholder="John Doe" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
                 />
-            </div>
-            <div>
-                <label
-                    htmlFor="phone"
-                    className="block text-sm font-medium mb-1">
-                    Phone
-                </label>
-                <input
-                    type="tel"
-                    id="phone"
+
+                <FormField
+                    control={form.control}
                     name="phone"
-                    required
-                    className="w-full px-3 py-2 border rounded-md"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Phone</FormLabel>
+                            <FormControl>
+                                <Input placeholder="+1234567890" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
                 />
-            </div>
-            <button
-                type="submit"
-                disabled={isPending}
-                className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 disabled:opacity-50">
-                {isPending ? "Creating..." : "Create User"}
-            </button>
-        </form>
+
+                <Button type="submit" className="w-full" disabled={isPending}>
+                    {isPending ? "Creating..." : "Create User"}
+                </Button>
+            </form>
+        </Form>
     );
 };
