@@ -3,7 +3,7 @@
 import { db } from "@/db/db";
 import { users } from "@/db/schema";
 
-export async function createUser(formData: FormData) {
+export const createUser = async (formData: FormData) => {
     try {
         await db.insert(users).values({
             fullName: formData.get("fullName") as string,
@@ -14,4 +14,4 @@ export async function createUser(formData: FormData) {
     } catch (e) {
         return { error: "Failed to create user", source: e };
     }
-}
+};

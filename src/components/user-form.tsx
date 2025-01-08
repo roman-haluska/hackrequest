@@ -3,10 +3,10 @@
 import { createUser } from "@/server/actions";
 import { useTransition } from "react";
 
-export function UserForm() {
+export const UserForm = () => {
     const [isPending, startTransition] = useTransition();
 
-    async function handleSubmit(formData: FormData) {
+    const handleSubmit = async (formData: FormData) => {
         startTransition(async () => {
             const result = await createUser(formData);
             if (result.success) {
@@ -15,7 +15,7 @@ export function UserForm() {
                 ).reset();
             }
         });
-    }
+    };
 
     return (
         <form
@@ -58,4 +58,4 @@ export function UserForm() {
             </button>
         </form>
     );
-}
+};
