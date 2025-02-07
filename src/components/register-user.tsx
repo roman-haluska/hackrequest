@@ -3,11 +3,11 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useTransition } from 'react'
-import { createUser } from '@/server/actions'
+import { createRegistration } from '@/server/actions'
 import { registerSchema, type RegisterFormData } from '@/lib/schemas'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { DatePicker } from '@/components/ui/datePicker'
 import {
     Form,
@@ -28,7 +28,7 @@ export const RegisterForm = () => {
             email: '',
             gender: '',
             birthDate: new Date(),
-            category: '',
+            // category: '',
             city: '',
             club: '',
         },
@@ -36,7 +36,7 @@ export const RegisterForm = () => {
 
     const onSubmit = (values: RegisterFormData) => {
         startTransition(async () => {
-            const result = await createUser(values)
+            const result = await createRegistration(values)
             if (result.success) {
                 form.reset()
             }
@@ -108,7 +108,7 @@ export const RegisterForm = () => {
                     )}
                 />
 
-                <FormField
+                {/* <FormField
                     control={form.control}
                     name='category'
                     render={({ field }) => (
@@ -135,7 +135,7 @@ export const RegisterForm = () => {
                             <FormMessage />
                         </FormItem>
                     )}
-                />
+                /> */}
 
                 <FormField
                     control={form.control}
