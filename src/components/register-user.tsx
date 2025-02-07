@@ -179,15 +179,17 @@ export const RegisterForm = ({ eventId }: { eventId: number }) => {
                                                     </SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent>
-                                                    {categories.map(
-                                                        (category) => (
+                                                    {GENDERS.map(
+                                                        (gender) => (
                                                             <SelectItem
-                                                                key={category.id}
+                                                                key={
+                                                                    gender.id
+                                                                }
                                                                 value={
-                                                                    category.id
+                                                                    gender.id
                                                                 }
                                                             >
-                                                                {category.name}
+                                                                {gender.name}
                                                             </SelectItem>
                                                         )
                                                     )}
@@ -230,15 +232,20 @@ export const RegisterForm = ({ eventId }: { eventId: number }) => {
                                                     </SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent>
-                                                    <SelectItem value='OSA 1 dievčatá'>
-                                                        OSA 1 dievčatá
-                                                    </SelectItem>
-                                                    <SelectItem value='OSA 2 dievčatá'>
-                                                        OSA 2 dievčatá
-                                                    </SelectItem>
-                                                    <SelectItem value='OSA 1 chlapci'>
-                                                        OSA 1 chlapci
-                                                    </SelectItem>
+                                                    {categories.map(
+                                                        (category) => (
+                                                            <SelectItem
+                                                                key={
+                                                                    category.id
+                                                                }
+                                                                value={
+                                                                    category.id
+                                                                }
+                                                            >
+                                                                {category.name}
+                                                            </SelectItem>
+                                                        )
+                                                    )}
                                                 </SelectContent>
                                             </Select>
                                             <FormMessage />

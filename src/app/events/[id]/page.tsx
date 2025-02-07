@@ -109,7 +109,7 @@ export default async function EventDetailPage({
                     </Link>
                 )}
 
-                <Link href={`/events/${event.id}/list`}>
+                <Link href={`/events/${event.id}/attendees`}>
                     <Button size={'lg'} className={'mt-8'} variant={'outline'}>
                         Zoznam účastníkov
                     </Button>
