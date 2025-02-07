@@ -3,7 +3,8 @@ import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { db } from '@/db/db'
-import { attendees } from '@/db/schema'
+import { attendees, eventRegistrations } from '@/db/schema'
+import { eq } from 'drizzle-orm'
 
 export const fetchUsers = async () => {
 	const supabase = createServerComponentClient({ cookies })
@@ -11,6 +12,10 @@ export const fetchUsers = async () => {
 	if (!session) {
 		redirect('/login')
 	}
-	const users = await db.select().from(attendees)
+	const users = await db
+		.select()
+		.from(attendees)
+		.leftJoin(eventRegistrations, eq(attendees.id, eventRegistrations.attendeeId))
+
 	return users
 }

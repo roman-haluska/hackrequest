@@ -18,6 +18,8 @@ export const attendees = pgTable("attendees", {
     club: text("club"),                            // Klub (optional)
 });
 
+export type Attendee = typeof attendees.$inferSelect;
+
 export const events = pgTable('events', {
   id: serial('id').primaryKey(),
   name: text('name').notNull(),                    // e.g. "CYKLOKROSA", "OSA TRÁVATHLON 2024"
