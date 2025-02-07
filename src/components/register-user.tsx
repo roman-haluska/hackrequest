@@ -97,10 +97,8 @@ export const RegisterForm = ({ eventId }: { eventId: number }) => {
 
     const onSubmit = (values: RegisterFormData) => {
         startTransition(async () => {
-            const result = await createRegistration(values, eventId)
-            if (result.success) {
-                form.reset()
-            }
+            await createRegistration(values, eventId)
+            form.reset()
         })
     }
 
