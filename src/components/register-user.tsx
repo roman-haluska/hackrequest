@@ -24,12 +24,13 @@ import {
     FormMessage,
 } from '@/components/ui/form'
 
-export const RegisterForm = () => {
+export const RegisterForm = ({ eventId }: { eventId: number }) => {
     const [isPending, startTransition] = useTransition()
 
     const form = useForm<RegisterFormData>({
         resolver: zodResolver(registerSchema),
         defaultValues: {
+<<<<<<< HEAD
             users: [
                 {
                     fullName: '',
@@ -41,6 +42,16 @@ export const RegisterForm = () => {
                     club: '',
                 },
             ],
+=======
+            fullName: '',
+            email: '',
+            gender: '',
+            birthDate: new Date(),
+            category: '',
+            city: '',
+            club: '',
+            eventId,
+>>>>>>> 77f5fc7eb2ddd424407ba827370773fc02abb1e7
         },
     })
 
@@ -257,6 +268,7 @@ export const RegisterForm = () => {
                         Pridať ďalšieho účastníka
                     </Button>
 
+<<<<<<< HEAD
                     <Button
                         type='submit'
                         size={'lg'}
@@ -269,5 +281,14 @@ export const RegisterForm = () => {
                 </form>
             </Form>
         </div>
+=======
+                <input type='hidden' {...form.register('eventId')} />
+
+                <Button type='submit' className='w-full' disabled={isPending}>
+                    {isPending ? 'Odosiela sa...' : 'Registrovať'}
+                </Button>
+            </form>
+        </Form>
+>>>>>>> 77f5fc7eb2ddd424407ba827370773fc02abb1e7
     )
 }
