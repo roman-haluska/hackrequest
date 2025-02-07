@@ -1,8 +1,13 @@
 import { z } from "zod";
 
-export const userSchema = z.object({
+export const registerSchema = z.object({
     fullName: z.string().min(2, "Name must be at least 2 characters"),
-    phone: z.string().regex(/^\+?[1-9]\d{1,14}$/, "Invalid phone number"),
+    email: z.string().email("Invalid email address"),
+    gender: z.string().min(1, "Gender is required"),
+    birthDate: z.date().refine(date => !isNaN(date.getTime()), "Invalid date format"),
+    category: z.string().min(1, "Category is required"),
+    city: z.string().min(1, "City is required"),
+    club: z.string().optional(),
 });
 
-export type UserFormData = z.infer<typeof userSchema>;
+export type RegisterFormData = z.infer<typeof registerSchema>;
