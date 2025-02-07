@@ -19,19 +19,18 @@ const [event] = await db.select().from(events).where(eq(events.id, parseInt(para
 
   const formattedStartDate = format(event.startDate, 'dd.M.yyyy');
   const formattedEndDate = format(event.endDate, 'dd.M.yyyy');
-  const dateDisplay = event.startDate === event.endDate 
+  const dateDisplay = event.startDate === event.endDate
     ? formattedStartDate
     : `${formattedStartDate} – ${formattedEndDate}`;
 
   return (
-    <div className="container mx-auto p-6">
-      <div className="max-w-3xl mx-auto">
+    <div className="container">
         {/* Image */}
-        <div 
+        <div
           className="w-full h-[400px] rounded-lg bg-cover bg-center mb-8"
-          style={{ 
-            backgroundImage: event.imageUrl 
-              ? `url(${event.imageUrl})` 
+          style={{
+            backgroundImage: event.imageUrl
+              ? `url(${event.imageUrl})`
               : 'linear-gradient(to bottom right, #1f2937, #111827)'
           }}
         />
@@ -62,7 +61,7 @@ const [event] = await db.select().from(events).where(eq(events.id, parseInt(para
             <Calendar className="w-5 h-5" />
             <span>{dateDisplay}</span>
           </div>
-          
+
           <div className="flex items-center gap-2 text-muted-foreground">
             <MapPin className="w-5 h-5" />
             <span>{event.location}</span>
@@ -84,7 +83,6 @@ const [event] = await db.select().from(events).where(eq(events.id, parseInt(para
             </p>
           </div>
         )}
-      </div>
     </div>
   );
-} 
+}

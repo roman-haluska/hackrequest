@@ -8,6 +8,7 @@ import jsPDF from 'jspdf'
 import 'jspdf-autotable'
 import { format } from 'date-fns'
 import { AttendesWithEvent } from './users-fetch'
+import { useRouter } from 'next/navigation'
 
 type Props = {
     users: AttendesWithEvent
@@ -17,6 +18,7 @@ export const AdminDashboard = (props: Props) => {
     const { users } = props
     const [searchQuery, setSearchQuery] = useState('')
     const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' })
+    const router = useRouter()
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(event.target.value)
@@ -134,7 +136,7 @@ export const AdminDashboard = (props: Props) => {
                 <TableBody>
                     {filteredUsers.map((user) => (
                         <TableRow key={user.id} className='hover:bg-gray-100'>
-                            <TableCell className='p-4 border-b'>{user.eventName ?? '-'}</TableCell>
+                            <TableCell className='p-4 border-b cursor-pointer' onClick={() => router.push(`/events/${user.eventId}`)}>{user.eventName ?? '-'}</TableCell>
                             <TableCell className='p-4 border-b'>{user.id}</TableCell>
                             <TableCell className='p-4 border-b'>{user.fullName}</TableCell>
                             <TableCell className='p-4 border-b'>{user.email}</TableCell>
