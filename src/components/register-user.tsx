@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { DatePicker } from '@/components/ui/datePicker'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 
-export const RegisterForm = () => {
+export const RegisterForm = ({ eventId }: { eventId: number }) => {
     const [isPending, startTransition] = useTransition()
 
     const form = useForm<RegisterFormData>({
@@ -24,6 +24,7 @@ export const RegisterForm = () => {
             category: '',
             city: '',
             club: '',
+            eventId,
         },
     })
 
@@ -154,6 +155,8 @@ export const RegisterForm = () => {
                         </FormItem>
                     )}
                 />
+
+                <input type='hidden' {...form.register('eventId')} />
 
                 <Button type='submit' className='w-full' disabled={isPending}>
                     {isPending ? 'Odosiela sa...' : 'Registrovať'}
