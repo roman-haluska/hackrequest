@@ -2,12 +2,12 @@
 
 import { db } from "@/db/db";
 import { users } from "@/db/schema";
-import { UserFormData, userSchema } from "@/lib/schemas";
+import { RegisterFormData, registerSchema } from "@/lib/schemas";
 import { revalidatePath } from "next/cache";
 
-export const createUser = async (formData: UserFormData) => {
+export const createUser = async (formData: RegisterFormData) => {
     try {
-        const validatedData = userSchema.parse(formData);
+        const validatedData = registerSchema.parse(formData);
 
         await db.insert(users).values(validatedData);
         revalidatePath("/");

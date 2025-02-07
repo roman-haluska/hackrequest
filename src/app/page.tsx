@@ -1,4 +1,4 @@
-import { UserForm } from "@/components/user-form";
+import { RegisterForm } from "@/components/register-user";
 import { db } from "@/db/db";
 import { users } from "@/db/schema";
 
@@ -8,7 +8,7 @@ const Home = async () => {
     return (
         <div className="min-h-screen flex items-center justify-center p-4 flex-col">
             <h1 className="font-bold text-xl">Users</h1>
-            <UserForm />
+            <RegisterForm />
             <h2 className="font-bold text-xl mt-4">List</h2>
             {usersData.map((user) => (
                 <div key={user.id}>
