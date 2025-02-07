@@ -1,5 +1,5 @@
-// src/app/admin/AdminDashboard.tsx
 'use client'
+
 import React, { useState } from 'react'
 import { LogoutButton } from '@/components/logout-button'
 import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui/table'
@@ -56,28 +56,43 @@ export const AdminDashboard = (props: Props) => {
             user.gender?.toLowerCase().includes(searchQuery.toLowerCase())
     )
 
-    const exportToPDF = () => {
-        const doc = new jsPDF()
-        doc.autoTable({
-            head: [['ID', 'Name', 'Email', 'City', 'Category', 'Club', 'Date of Birth', 'Gender']],
-            body: filteredUsers.map((user) => [
-                user.id,
-                user.fullName,
-                user.email,
-                user.city,
-                user.category,
-                user.club,
-                format(new Date(user.dateOfBirth!), 'dd.MM.yyyy'),
-                user.gender,
-            ]),
-        })
-        doc.save('users.pdf')
-    }
+ const exportToPDF = () => {
+  const doc = new jsPDF()
+  doc.autoTable({
+   head: [['Event Name', 'ID', 'Name', 'Email', 'City', 'Date of Birth', 'Gender']],
+   body: filteredUsers.map((user) => [
+    user.eventName ?? '-',
+    user.id,
+    user.fullName,
+    user.email,
+    user.city,
+    format(new Date(user.dateOfBirth!), 'dd.MM.yyyy'),
+    user.gender,
+   ]),
+   styles: {
+    fillColor: [255, 154, 0],
+    textColor: [255, 255, 255],
+   },
+   headStyles: {
+    fillColor: [255, 154, 0],
+    textColor: [255, 255, 255],
+    fontStyle: 'bold',
+   },
+   bodyStyles: {
+    fillColor: [255, 255, 255],
+    textColor: [0, 0, 0],
+   },
+   alternateRowStyles: {
+    fillColor: [245, 245, 245],
+   },
+  })
+  doc.save('users.pdf')
+ }
 
     return (
         <div className='container mx-auto p-6 min-h-screen '>
             <div className='flex justify-between items-center mb-6'>
-                <h1 className='text-3xl font-bold text-gray-800'>Zoznam registrovaných na podujatie</h1>
+                <h1 className='text-3xl font-bold text-gray-800'>Zoznam všetkých účasnikov</h1>
                 <LogoutButton />
             </div>
             <div className='mb-4 flex space-x-4'>

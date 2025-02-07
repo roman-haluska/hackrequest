@@ -1,4 +1,3 @@
-// src/app/admin/page.tsx
 import { fetchUsers } from './users-fetch'
 import { AdminDashboard } from './AdminDashboard'
 
