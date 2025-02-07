@@ -115,6 +115,7 @@ export default async function EventDetailPage({
                     </Button>
                 </Link>
             </div>
-        </div>
+        {/* Button to view registered users */}
+    </div>
     )
 }

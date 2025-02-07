@@ -1,25 +1,21 @@
 'use client'
 
 import React, { useState } from 'react'
-import { LogoutButton } from '@/components/logout-button'
 import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui/table'
 import { Attendee } from '@/db/schema'
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
-import { format } from 'date-fns'
-import { AttendesWithEvent } from './users-fetch'
-import { useRouter } from 'next/navigation'
+import { AttendesByEventWithEvent } from './attendeesByEvent-fetch'
 import { Button } from '@/components/ui/button'
 
 type Props = {
-    users: AttendesWithEvent
+    users: AttendesByEventWithEvent
 }
 
-export const AdminDashboard = (props: Props) => {
+export const AttendeesDashboard = (props: Props) => {
     const { users } = props
     const [searchQuery, setSearchQuery] = useState('')
     const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' })
-    const router = useRouter()
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(event.target.value)
@@ -49,39 +45,31 @@ export const AdminDashboard = (props: Props) => {
 
     const filteredUsers = sortedUsers.filter(
         (user) =>
-            user.eventName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
             user.fullName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            user.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            user.city?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            user.category?.toLowerCase().includes(searchQuery.toLowerCase()) ||
             user.club?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            user.dateOfBirth?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            user.gender?.toLowerCase().includes(searchQuery.toLowerCase())
+            user.category?.toLowerCase().includes(searchQuery.toLowerCase())
     )
 
  const exportToPDF = () => {
   const doc = new jsPDF()
   doc.autoTable({
-   head: [['Event Name', 'ID', 'Name', 'Email', 'City', 'Date of Birth', 'Gender']],
+   head: [['ID', 'Name', 'Category', 'Club']],
    body: filteredUsers.map((user) => [
-    user.eventName ?? '-',
     user.id,
     user.fullName,
-    user.email,
-    user.city,
-    format(new Date(user.dateOfBirth!), 'dd.MM.yyyy'),
-    user.gender,
+    user.category || '-',
+    user.club || '-',
    ]),
-      styles: {
-          // 255, 191, 0
-          fillColor: [255, 191, 0],
-          textColor: [0,0,0],
-      },
-      headStyles: {
-          fillColor: [255, 191, 0],
-          textColor: [0,0,0],
-          fontStyle: 'bold',
-      },
+   styles: {
+       // 255, 191, 0
+    fillColor: [255, 191, 0],
+    textColor: [0,0,0],
+   },
+   headStyles: {
+    fillColor: [255, 191, 0],
+    textColor: [0,0,0],
+    fontStyle: 'bold',
+   },
    bodyStyles: {
     fillColor: [255, 255, 255],
     textColor: [0, 0, 0],
@@ -96,9 +84,9 @@ export const AdminDashboard = (props: Props) => {
     return (
         <div className='container mx-auto p-6 min-h-screen '>
             <div className='flex justify-between items-center mb-6'>
-                <h1 className='text-3xl font-bold text-gray-800'>Zoznam všetkých účastníkov</h1>
-                <LogoutButton />
+                <h1 className='text-3xl font-bold text-gray-800'>Zoznam registrovaných účastníkov</h1>
             </div>
+
             <div className='mb-4 flex space-x-4'>
                 <input
                     type='text'
@@ -115,15 +103,10 @@ export const AdminDashboard = (props: Props) => {
                 <TableHeader className='bg-primary text-black'>
                     <TableRow>
                         {[
-                            'eventName',
                             'id',
                             'fullName',
-                            'email',
-                            'city',
                             'category',
                             'club',
-                            'dateOfBirth',
-                            'gender',
                         ].map((key) => (
                             <TableCell
                                 key={key}
@@ -138,17 +121,10 @@ export const AdminDashboard = (props: Props) => {
                 <TableBody>
                     {filteredUsers.map((user) => (
                         <TableRow key={user.id} className='hover:bg-gray-100'>
-                            <TableCell className='p-4 border-b cursor-pointer' onClick={() => router.push(`/events/${user.eventId}`)}>{user.eventName ?? '-'}</TableCell>
                             <TableCell className='p-4 border-b'>{user.id}</TableCell>
                             <TableCell className='p-4 border-b'>{user.fullName}</TableCell>
-                            <TableCell className='p-4 border-b'>{user.email}</TableCell>
-                            <TableCell className='p-4 border-b'>{user.city}</TableCell>
                             <TableCell className='p-4 border-b'>{user.category || '-'}</TableCell>
                             <TableCell className='p-4 border-b'>{user.club || '-'}</TableCell>
-                            <TableCell className='p-4 border-b'>
-                                {format(new Date(user.dateOfBirth!), 'dd.MM.yyyy')}
-                            </TableCell>
-                            <TableCell className='p-4 border-b'>{user.gender}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
