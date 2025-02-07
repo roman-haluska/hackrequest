@@ -42,8 +42,7 @@ export type Event = typeof events.$inferSelect;
 export const eventRegistrations = pgTable('event_registrations', {
   id: serial('id').primaryKey(),
   eventId: serial('event_id').references(() => events.id),
-  participantName: text('participant_name').notNull(),
-  participantEmail: text('participant_email').notNull(),
+  attendeeId: serial('attendee_id').references(() => attendees.id),
   registrationDate: timestamp('registration_date')
     .notNull()
     .defaultNow(),
