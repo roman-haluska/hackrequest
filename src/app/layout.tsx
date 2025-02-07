@@ -66,7 +66,7 @@ export default function RootLayout({
 						</div>
 					</div>
 				</header>
-				<div className="h-[calc(100vh-240px)] max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+				<div className="min-h-[calc(100vh-240px)] max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
 					<QueryProvider>{children}</QueryProvider>
 				</div>
 				<footer className="bg-gray-900 text-white py-8 border-t-4 border-yellow-500">
