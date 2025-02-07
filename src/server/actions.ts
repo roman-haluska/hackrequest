@@ -8,63 +8,50 @@ import { revalidatePath } from 'next/cache'
 import { sendMail } from './emails'
 import { eq } from 'drizzle-orm'
 
-export const createRegistration = async (formData: RegisterFormData) => {
+export const createRegistration = async (formData: RegisterFormData, eventId: number) => {
     try {
         const validatedData = registerSchema.parse(formData)
 
-<<<<<<< HEAD
-        const usersToInsert = validatedData.users.map(user => ({
-            fullName: user.fullName,
-            email: user.email,
-            gender: user.gender,
-            dateOfBirth: user.birthDate.toISOString(),
-            city: user.city,
-            club: user.club,
-        }));
+        const promises = validatedData.users.map(async (user) => {
+            let attendeeId: number
 
-        await db.insert(attendees).values(usersToInsert);
-        revalidatePath("/");
-        return { success: true };
-    } catch (e) {
-        console.log('error', e);
-        return { error: "Failed to create users", source: e };
-=======
-        let attendeeId: number
+            const [existingAttendee] = await db.select().from(attendees).where(eq(attendees.email, user.email))
 
-        const [existingAttendee] = await db.select().from(attendees).where(eq(attendees.email, validatedData.email))
+            if (!existingAttendee) {
+                const [{ id }] = await db
+                    .insert(attendees)
+                    .values({
+                        fullName: user.fullName,
+                        email: user.email,
+                        gender: user.gender,
+                        dateOfBirth: user.birthDate.toISOString(),
+                        city: user.city,
+                        club: user.club,
+                    })
+                    .returning({ id: attendees.id })
+                attendeeId = id
+            } else {
+                attendeeId = existingAttendee.id
+            }
 
-        if (!existingAttendee) {
-            const [{ id }] = await db
-                .insert(attendees)
-                .values({
-                    fullName: validatedData.fullName,
-                    email: validatedData.email,
-                    gender: validatedData.gender,
-                    dateOfBirth: validatedData.birthDate.toISOString(),
-                    city: validatedData.city,
-                    club: validatedData.club,
-                })
-                .returning({ id: attendees.id })
-            attendeeId = id
-        } else {
-            attendeeId = existingAttendee.id
-        }
+            // formData.eventId
+            await db.insert(eventRegistrations).values({
+                eventId,
+                attendeeId: attendeeId,
+            })
 
-        await db.insert(eventRegistrations).values({
-            eventId: formData.eventId,
-            attendeeId: attendeeId,
+            await sendMail({
+                userEmail: user.email,
+                userName: user.fullName,
+            })
         })
 
-        await sendMail({
-            userEmail: validatedData.email,
-            userName: validatedData.fullName,
-        })
+        await Promise.all(promises)
 
         revalidatePath('/')
         return { success: true }
     } catch (e) {
         console.log('error', e)
-        return { error: 'Failed to create user', source: e }
->>>>>>> 77f5fc7eb2ddd424407ba827370773fc02abb1e7
+        return { error: 'Failed to create users', source: e }
     }
 }
