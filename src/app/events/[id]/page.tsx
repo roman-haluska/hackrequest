@@ -86,7 +86,7 @@ const [event] = await db.select().from(events).where(eq(events.id, parseInt(para
     {/* Button to view registered users */}
     <div className="mt-8">
         <a
-            href={`/admin/${event.id}`}
+            href={`/events/${event.id}/users`}
             className="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
         >
             Zobraziť prihlásených účastníkov

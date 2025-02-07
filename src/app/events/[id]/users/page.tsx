@@ -1,8 +1,8 @@
-import { AdminDashboard } from '../AdminDashboard'
 import { fetchUsersByEvents } from './usersByEvent-fetch'
+import { UsersDashboard } from './UsersDashboard'
 
 
 export default async function Page({ params }: { params: { id: number } }) {
     const users = await fetchUsersByEvents(params.id)
-    return <AdminDashboard users={users} />
+    return <UsersDashboard users={users} />
 }

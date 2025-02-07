@@ -1,24 +1,22 @@
 'use client'
 
 import React, { useState } from 'react'
-import { LogoutButton } from '@/components/logout-button'
 import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui/table'
 import { Attendee } from '@/db/schema'
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
 import { format } from 'date-fns'
-import { AttendesWithEvent } from './users-fetch'
-import { useRouter } from 'next/navigation'
+import { AttendesByEventWithEvent } from './usersByEvent-fetch'
+import { Button } from '@/components/ui/button'
 
 type Props = {
-    users: AttendesWithEvent
+    users: AttendesByEventWithEvent
 }
 
-export const AdminDashboard = (props: Props) => {
+export const UsersDashboard = (props: Props) => {
     const { users } = props
     const [searchQuery, setSearchQuery] = useState('')
     const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' })
-    const router = useRouter()
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(event.target.value)
@@ -94,9 +92,9 @@ export const AdminDashboard = (props: Props) => {
     return (
         <div className='container mx-auto p-6 min-h-screen '>
             <div className='flex justify-between items-center mb-6'>
-                <h1 className='text-3xl font-bold text-gray-800'>Zoznam všetkých účastníkov</h1>
-                <LogoutButton />
+                <h1 className='text-3xl font-bold text-gray-800'>Zoznam registrovaných účastníkov</h1>
             </div>
+
             <div className='mb-4 flex space-x-4'>
                 <input
                     type='text'
@@ -105,23 +103,19 @@ export const AdminDashboard = (props: Props) => {
                     onChange={handleSearchChange}
                     className='p-2 border border-gray-300 rounded flex-grow'
                 />
-                <button onClick={exportToPDF} className='p-2 bg-[#ff9a00] text-white rounded'>
+                <Button onClick={exportToPDF}>
                     Export to PDF
-                </button>
+                </Button>
             </div>
             <Table className='min-w-full bg-white shadow-md rounded-lg overflow-hidden'>
-                <TableHeader className='bg-[#ff9a00] text-white'>
+                <TableHeader className='bg-primary text-black'>
                     <TableRow>
                         {[
-                            'eventName',
                             'id',
                             'fullName',
                             'email',
-                            'city',
                             'category',
                             'club',
-                            'dateOfBirth',
-                            'gender',
                         ].map((key) => (
                             <TableCell
                                 key={key}
@@ -136,17 +130,11 @@ export const AdminDashboard = (props: Props) => {
                 <TableBody>
                     {filteredUsers.map((user) => (
                         <TableRow key={user.id} className='hover:bg-gray-100'>
-                            <TableCell className='p-4 border-b cursor-pointer' onClick={() => router.push(`/events/${user.eventId}`)}>{user.eventName ?? '-'}</TableCell>
                             <TableCell className='p-4 border-b'>{user.id}</TableCell>
                             <TableCell className='p-4 border-b'>{user.fullName}</TableCell>
                             <TableCell className='p-4 border-b'>{user.email}</TableCell>
-                            <TableCell className='p-4 border-b'>{user.city}</TableCell>
                             <TableCell className='p-4 border-b'>{user.category || '-'}</TableCell>
                             <TableCell className='p-4 border-b'>{user.club || '-'}</TableCell>
-                            <TableCell className='p-4 border-b'>
-                                {format(new Date(user.dateOfBirth!), 'dd.MM.yyyy')}
-                            </TableCell>
-                            <TableCell className='p-4 border-b'>{user.gender}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
