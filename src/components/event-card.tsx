@@ -49,7 +49,7 @@ export function EventCard({ event }: EventCardProps) {
                 <div className="text-xl font-bold text-red-500">ZRUŠENÉ</div>
               ) : (
                 <Link href={`/events/${event.id}`}>
-                  <Button className="w-full" variant="outline">
+                  <Button className="w-full">
                     Zobraziť detaily
                   </Button>
                 </Link>
