@@ -13,14 +13,23 @@ export default async function EventDetailPage({
 }: {
     params: { id: string }
 }) {
-    const [event] = await db
-        .select()
-        .from(events)
-        .where(eq(events.id, parseInt(params.id)))
+  const { id } = await params
 
-    if (!event) {
-        notFound()
-    }
+  const eventId = Number.isNaN(id) ? null : Number(id)
+
+  if (!eventId) {
+    notFound()
+}
+  
+  const [event] = await db
+      .select()
+      .from(events)
+      .where(eq(events.id, parseInt(id)))
+
+  
+  if (!event) {
+      notFound()
+  }
 
     const formattedStartDate = format(event.startDate, 'dd.M.yyyy')
     const formattedEndDate = format(event.endDate, 'dd.M.yyyy')
