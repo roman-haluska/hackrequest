@@ -9,6 +9,7 @@ import 'jspdf-autotable'
 import { format } from 'date-fns'
 import { AttendesWithEvent } from './users-fetch'
 import { useRouter } from 'next/navigation'
+import { Button } from '@/components/ui/button'
 
 type Props = {
     users: AttendesWithEvent
@@ -71,15 +72,16 @@ export const AdminDashboard = (props: Props) => {
     format(new Date(user.dateOfBirth!), 'dd.MM.yyyy'),
     user.gender,
    ]),
-   styles: {
-    fillColor: [255, 154, 0],
-    textColor: [255, 255, 255],
-   },
-   headStyles: {
-    fillColor: [255, 154, 0],
-    textColor: [255, 255, 255],
-    fontStyle: 'bold',
-   },
+      styles: {
+          // 255, 191, 0
+          fillColor: [255, 191, 0],
+          textColor: [0,0,0],
+      },
+      headStyles: {
+          fillColor: [255, 191, 0],
+          textColor: [0,0,0],
+          fontStyle: 'bold',
+      },
    bodyStyles: {
     fillColor: [255, 255, 255],
     textColor: [0, 0, 0],
@@ -105,12 +107,12 @@ export const AdminDashboard = (props: Props) => {
                     onChange={handleSearchChange}
                     className='p-2 border border-gray-300 rounded flex-grow'
                 />
-                <button onClick={exportToPDF} className='p-2 bg-[#ff9a00] text-white rounded'>
+                <Button onClick={exportToPDF}>
                     Export to PDF
-                </button>
+                </Button>
             </div>
             <Table className='min-w-full bg-white shadow-md rounded-lg overflow-hidden'>
-                <TableHeader className='bg-[#ff9a00] text-white'>
+                <TableHeader className='bg-primary text-black'>
                     <TableRow>
                         {[
                             'eventName',

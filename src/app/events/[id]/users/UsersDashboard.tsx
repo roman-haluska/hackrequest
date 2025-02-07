@@ -5,7 +5,6 @@ import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components
 import { Attendee } from '@/db/schema'
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
-import { format } from 'date-fns'
 import { AttendesByEventWithEvent } from './usersByEvent-fetch'
 import { Button } from '@/components/ui/button'
 
@@ -46,36 +45,29 @@ export const UsersDashboard = (props: Props) => {
 
     const filteredUsers = sortedUsers.filter(
         (user) =>
-            user.eventName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
             user.fullName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            user.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            user.city?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            user.category?.toLowerCase().includes(searchQuery.toLowerCase()) ||
             user.club?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            user.dateOfBirth?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            user.gender?.toLowerCase().includes(searchQuery.toLowerCase())
+            user.category?.toLowerCase().includes(searchQuery.toLowerCase())
     )
 
  const exportToPDF = () => {
   const doc = new jsPDF()
   doc.autoTable({
-   head: [['Event Name', 'ID', 'Name', 'Email', 'City', 'Date of Birth', 'Gender']],
+   head: [['ID', 'Name', 'Category', 'Club']],
    body: filteredUsers.map((user) => [
-    user.eventName ?? '-',
     user.id,
     user.fullName,
-    user.email,
-    user.city,
-    format(new Date(user.dateOfBirth!), 'dd.MM.yyyy'),
-    user.gender,
+    user.category || '-',
+    user.club || '-',
    ]),
    styles: {
-    fillColor: [255, 154, 0],
-    textColor: [255, 255, 255],
+       // 255, 191, 0
+    fillColor: [255, 191, 0],
+    textColor: [0,0,0],
    },
    headStyles: {
-    fillColor: [255, 154, 0],
-    textColor: [255, 255, 255],
+    fillColor: [255, 191, 0],
+    textColor: [0,0,0],
     fontStyle: 'bold',
    },
    bodyStyles: {
@@ -113,7 +105,6 @@ export const UsersDashboard = (props: Props) => {
                         {[
                             'id',
                             'fullName',
-                            'email',
                             'category',
                             'club',
                         ].map((key) => (
@@ -132,7 +123,6 @@ export const UsersDashboard = (props: Props) => {
                         <TableRow key={user.id} className='hover:bg-gray-100'>
                             <TableCell className='p-4 border-b'>{user.id}</TableCell>
                             <TableCell className='p-4 border-b'>{user.fullName}</TableCell>
-                            <TableCell className='p-4 border-b'>{user.email}</TableCell>
                             <TableCell className='p-4 border-b'>{user.category || '-'}</TableCell>
                             <TableCell className='p-4 border-b'>{user.club || '-'}</TableCell>
                         </TableRow>
