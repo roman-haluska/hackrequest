@@ -25,7 +25,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ value, onChange }) => {
         <Button
           variant={"outline"}
           className={cn(
-            "w-[280px] justify-start text-left font-normal",
+            "w-full justify-start text-left font-normal h-12 hover:bg-white shadow-none",
             !value && "text-muted-foreground"
           )}
         >

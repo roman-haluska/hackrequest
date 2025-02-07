@@ -1,13 +1,22 @@
-import { z } from "zod";
+import { z } from 'zod'
 
 export const registerSchema = z.object({
-    fullName: z.string().min(2, "Name must be at least 2 characters"),
-    email: z.string().email("Invalid email address"),
-    gender: z.string().min(1, "Gender is required"),
-    birthDate: z.date().refine(date => !isNaN(date.getTime()), "Invalid date format"),
-    category: z.string().min(1, "Category is required"),
-    city: z.string().min(1, "City is required"),
-    club: z.string().optional(),
-});
+    users: z.array(
+        z.object({
+            fullName: z.string().min(1, 'Pohlavie je povinné'),
+            email: z.string().email('Neplatná emailová adresa'),
+            gender: z.string().min(1, 'Pohlavie je povinné'),
+            birthDate: z
+                .date()
+                .refine(
+                    (date) => !isNaN(date.getTime()),
+                    'Neplatný formát dátumu'
+                ),
+            category: z.string().min(1, 'Kategória je povinná'),
+            city: z.string().optional(),
+            club: z.string().optional(),
+        })
+    ),
+})
 
-export type RegisterFormData = z.infer<typeof registerSchema>;
+export type RegisterFormData = z.infer<typeof registerSchema>

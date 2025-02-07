@@ -9,18 +9,20 @@ export const createRegistration = async (formData: RegisterFormData) => {
     try {
         const validatedData = registerSchema.parse(formData);
 
-        await db.insert(attendees).values({
-            fullName: validatedData.fullName,
-            email: validatedData.email,
-            gender: validatedData.gender,
-            dateOfBirth: validatedData.birthDate.toISOString(),
-            city: validatedData.city,
-            club: validatedData.club,
-        });
+        const usersToInsert = validatedData.users.map(user => ({
+            fullName: user.fullName,
+            email: user.email,
+            gender: user.gender,
+            dateOfBirth: user.birthDate.toISOString(),
+            city: user.city,
+            club: user.club,
+        }));
+
+        await db.insert(attendees).values(usersToInsert);
         revalidatePath("/");
         return { success: true };
     } catch (e) {
-        console.log('error', e)
-        return { error: "Failed to create user", source: e };
+        console.log('error', e);
+        return { error: "Failed to create users", source: e };
     }
 };
